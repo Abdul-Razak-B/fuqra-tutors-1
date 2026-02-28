@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Faculty Hub | Fuqra Tutors</title>
+        <link rel="icon" type="image/svg+xml"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%230056b3%22/><circle cx=%2250%22 cy=%2240%22 r=%2215%22 fill=%22white%22/><path d=%22M25 75 Q50 55 75 75%22 stroke=%22white%22 stroke-width=%228%22 fill=%22none%22 stroke-linecap=%22round%22/><path d=%22M75 25 L85 15 M85 25 L75 15%22 stroke=%22%23ffb703%22 stroke-width=%224%22/></svg>">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+            rel="stylesheet">
+        <style>
+            /* ============================================
+           ROOT VARIABLES & GLOBAL STYLES
+           ============================================ */
+            :root {
+                --primary: #0056b3;
+                --accent: #ffb703;
+                --bg-light: #f8f9fa;
+                --white: #ffffff;
+                --text-dark: #1a1a1a;
+                --text-muted: #757575;
+                --glass: rgba(255, 255, 255, 0.95);
+                --border: rgba(0, 0, 0, 0.05);
+                --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            }
+
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e0;
+                border-radius: 10px;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--bg-light);
+                color: var(--text-dark);
+                overflow-x: hidden;
+            }
+
+            /* ============================================
+           LOADER STYLES
+           ============================================ */
+            #loader-wrapper {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #ffffff;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                transition: opacity 0.8s ease-out, visibility 0.8s;
+            }
+
+            #loader-wrapper.hide {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .loader-container {
+                position: relative;
+                width: 150px;
+                height: 150px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .star-outline {
+                position: absolute;
+                fill: none;
+                stroke-width: 2;
+                stroke-dasharray: 150;
+                animation: rotateStar 4s linear infinite;
+            }
+
+            .star-1 {
+                width: 120px;
+                height: 120px;
+                stroke: var(--primary);
+            }
+
+            .star-2 {
+                width: 150px;
+                height: 150px;
+                stroke: var(--accent);
+                animation-duration: 6s;
+                animation-direction: reverse;
+            }
+
+            .tutor-icon-load {
+                width: 70px;
+                height: 70px;
+                background: var(--primary);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 5;
+                animation: pulse-icon 2s infinite;
+            }
+
+            @keyframes rotateStar {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes pulse-icon {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            /* ============================================
+           NAVBAR STYLES
+           ============================================ */
+            .navbar {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                padding: 1.2rem 10%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 1000;
+                background: var(--glass);
+                backdrop-filter: blur(15px);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                gap: 12px;
+                transition: 0.3s;
+            }
+
+            .logo-container:hover {
+                opacity: 0.8;
+            }
+
+            .nav-logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .logo-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.4rem;
+                color: var(--text-dark);
+                font-weight: 700;
+                letter-spacing: -0.5px;
+            }
+
+            .logo-title span {
+                color: var(--primary);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 40px;
+                list-style: none;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: var(--text-muted);
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                transition: 0.3s;
+                position: relative;
+            }
+
+            .nav-links a::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: var(--primary);
+                transition: width 0.3s;
+            }
+
+            .nav-links a:hover::after,
+            .nav-links a.active::after {
+                width: 100%;
+            }
+
+            .nav-links a.active {
+                color: var(--primary);
+            }
+
+            /* ============================================
+           HEADER STYLES
+           ============================================ */
+            .hub-header {
+                padding: 160px 10% 20px;
+                text-align: center;
+            }
+
+            .hub-header h1 {
+                font-family: 'Playfair Display', serif;
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                margin-bottom: 20px;
+                color: var(--text-dark);
+            }
+
+            .hub-header h1 i {
+                font-style: italic;
+                color: var(--primary);
+            }
+
+            /* ============================================
+           SEARCH STYLES
+           ============================================ */
+            .search-container {
+                max-width: 500px;
+                margin: 0 auto 20px;
+                position: relative;
+            }
+
+            .search-bar {
+                width: 100%;
+                padding: 15px 25px 15px 50px;
+                border-radius: 50px;
+                border: 2px solid var(--border);
+                background: var(--white);
+                box-shadow: var(--shadow);
+                outline: none;
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.9rem;
+                transition: 0.3s;
+            }
+
+            .search-bar:focus {
+                border-color: var(--primary);
+                box-shadow: 0 10px 35px rgba(0, 86, 179, 0.15);
+            }
+
+            .search-bar::placeholder {
+                color: var(--text-muted);
+            }
+
+            .search-icon {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--primary);
+                font-size: 1.1rem;
+                pointer-events: none;
+            }
+
+            /* ============================================
+           FILTER CHIPS STYLES
+           ============================================ */
+            .chips-container {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 50px;
+                flex-wrap: wrap;
+            }
+
+            .chip {
+                padding: 8px 20px;
+                background: var(--white);
+                border: 2px solid var(--border);
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                cursor: pointer;
+                text-transform: uppercase;
+                transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+                letter-spacing: 1px;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            .chip:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .chip.active {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+                box-shadow: 0 5px 20px rgba(0, 86, 179, 0.3);
+            }
+
+            /* ============================================
+           TUTOR GRID & CARD STYLES
+           ============================================ */
+            .tutor-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 25px;
+                padding: 0 10% 120px;
+                min-height: 300px;
+            }
+
+            .tutor-card {
+                background: var(--white);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+                border: 1px solid var(--border);
+                transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                text-decoration: none;
+                color: inherit;
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+            }
+
+            .tutor-card:hover {
+                transform: translateY(-8px);
+                border-color: var(--primary);
+                box-shadow: 0 20px 40px rgba(0, 86, 179, 0.15);
+            }
+
+            .card-img-wrap {
+                width: 100%;
+                height: 260px;
+                overflow: hidden;
+                background: #f0f0f0;
+                position: relative;
+            }
+
+            .card-img-wrap img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            }
+
+            .tutor-card:hover .card-img-wrap img {
+                transform: scale(1.08);
+            }
+
+            .card-body {
+                padding: 20px;
+                text-align: center;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .card-body span {
+                display: inline-block;
+                color: var(--primary);
+                font-size: 0.65rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                margin-bottom: 8px;
+            }
+
+            .card-body h3 {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.15rem;
+                margin-bottom: 8px;
+                color: var(--text-dark);
+                line-height: 1.3;
+            }
+
+            .card-body p {
+                font-size: 0.78rem;
+                color: var(--text-muted);
+                line-height: 1.6;
+            }
+
+            /* ============================================
+           NO RESULTS STYLES
+           ============================================ */
+            #no-results {
+                display: none;
+                text-align: center;
+                grid-column: 1 / -1;
+                padding: 80px 50px;
+                color: var(--text-muted);
+                font-style: italic;
+                font-size: 1.1rem;
+            }
+
+            /* ============================================
+           FOOTER STYLES
+           ============================================ */
+            footer {
+                padding: 40px;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 0.75rem;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                background: var(--white);
+                border-top: 1px solid var(--border);
+                margin-top: 60px;
+            }
+
+            /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+            @media (max-width: 768px) {
+                .navbar {
+                    padding: 1rem 5%;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .nav-links {
+                    gap: 20px;
+                }
+
+                .hub-header {
+                    padding: 120px 5% 15px;
+                }
+
+                .tutor-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                    gap: 20px;
+                    padding: 0 5% 80px;
+                }
+
+                .chips-container {
+                    gap: 8px;
+                    margin-bottom: 30px;
+                }
+
+                .chip {
+                    padding: 6px 15px;
+                    font-size: 0.65rem;
+                }
+
+                .search-container {
+                    max-width: 100%;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .logo-title {
+                    font-size: 1.1rem;
+                }
+
+                .nav-links {
+                    gap: 15px;
+                }
+
+                .nav-links a {
+                    font-size: 0.7rem;
+                }
+
+                .hub-header h1 {
+                    font-size: clamp(1.5rem, 4vw, 2.5rem);
+                    margin-bottom: 15px;
+                }
+
+                .tutor-grid {
+                    grid-template-columns: 1fr;
+                    gap: 15px;
+                    padding: 0 4% 60px;
+                }
+
+                .card-img-wrap {
+                    height: 200px;
+                }
+
+                .card-body {
+                    padding: 15px;
+                }
+
+                .chips-container {
+                    margin-bottom: 20px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- LOADER -->
+        <div id="loader-wrapper">
+            <div class="loader-container">
+                <svg class="star-outline star-1" viewBox="0 0 100 100" aria-hidden="true">
+                    <path d="M50 5 L63 38 L98 38 L70 58 L80 95 L50 75 L20 95 L30 58 L2 38 L37 38 Z" />
+                </svg>
+                <svg class="star-outline star-2" viewBox="0 0 100 100" aria-hidden="true">
+                    <path d="M50 5 L63 38 L98 38 L70 58 L80 95 L50 75 L20 95 L30 58 L2 38 L37 38 Z" />
+                </svg>
+                <div class="tutor-icon-load">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="white" aria-hidden="true">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                </div>
+            </div>
+            <p
+                style="margin-top: 20px; color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem;">
+                Faculty Network
+            </p>
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <a href="home.html" class="logo-container">
+                <svg class="nav-logo-icon" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle cx="50" cy="50" r="45" fill="#0056b3" />
+                    <circle cx="50" cy="40" r="15" fill="white" />
+                    <path d="M25 75 Q50 55 75 75" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" />
+                    <path d="M75 25 L85 15 M85 25 L75 15" stroke="#ffb703" stroke-width="4" />
+                </svg>
+                <div class="logo-title">Fuqra<span>Tutors</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="tutors.html" class="active">Tutors</a></li>
+                <li><a href="subjects.html">Subjects</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+        </nav>
+
+        <!-- HEADER WITH SEARCH -->
+        <header class="hub-header">
+            <h1>Meet Our <i>Experts.</i></h1>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="tutorSearch" class="search-bar" placeholder="Search by name or subject..."
+                    aria-label="Search tutors">
+            </div>
+            <div class="chips-container">
+                <div class="chip active" data-filter="all">All</div>
+                <div class="chip" data-filter="sona">Sona School</div>
+                <div class="chip" data-filter="educators">The Educators</div>
+                <div class="chip" data-filter="latif">Shah Latif</div>
+            </div>
+        </header>
+
+        <!-- TUTOR GRID -->
+        <section class="tutor-grid" id="tutorGrid" aria-label="Faculty members">
+            <a href="razak-portfolio.html" class="tutor-card" data-category="sona" data-name="sir abdul razak bhutto"
+                data-subject="computer science">
+                <div class="card-img-wrap"><img src="razak-member.jpg" alt="Sir Abdul Razak Bhutto"></div>
+                <div class="card-body">
+                    <span>MPhil Computer Science</span>
+                    <h3>Sir Abdul Razak Bhutto</h3>
+                    <p>Lecturer Computer Science.</p>
+                </div>
+            </a>
+            <a href="essa-portfolio.html" class="tutor-card" data-category="educators"
+                data-name="sir muhammad essa shar" data-subject="islamic studies">
+                <div class="card-img-wrap"><img src="essa-member.jpeg" alt="Sir Muhammad Essa Shar"></div>
+                <div class="card-body">
+                    <span>MSc Islamic Studies</span>
+                    <h3>Sir Muhammad Essa Shar</h3>
+                    <p>Lecturer Islamic Studies & Ethics.</p>
+                </div>
+            </a>
+            <a href="sonu-portfolio.html" class="tutor-card" data-category="educators" data-name="sir sachai nand sonu"
+                data-subject="english">
+                <div class="card-img-wrap"><img src="sachai-member.jpeg" alt="Sir Sachai Nand Sonu Lavha"></div>
+                <div class="card-body">
+                    <span>MPhil English (Linguistics)</span>
+                    <h3>Sir Sachai Nand Alias Sonu Lavha</h3>
+                    <p>English Language Teacher.</p>
+                </div>
+            </a>
+            <a href="sami-portfolio.html" class="tutor-card" data-category="latif" data-name="sir abdul sami"
+                data-subject="mathematics">
+                <div class="card-img-wrap"><img src="sami-member.jpeg" alt="Sir Abdul Sami Dayo"></div>
+                <div class="card-body">
+                    <span>BSc</span>
+                    <h3>Sir Abdul Sami Dayo</h3>
+                    <p>Subject Specialist Mathematics.</p>
+                </div>
+            </a>
+            <a href="mukesh-portfolio.html" class="tutor-card" data-category="latif" data-name="sir mukesh meghwar"
+                data-subject="chemistry mathematics">
+                <div class="card-img-wrap"><img src="mukesh-member.jpeg" alt="Sir Mukesh Meghwar"></div>
+                <div class="card-body">
+                    <span>MSc Chemistry</span>
+                    <h3>Sir Mukesh Kumar Jaipal</h3>
+                    <p>Chemistry & Mathematics Teacher.</p>
+                </div>
+            </a>
+            <a href="adnan-portfolio.html" class="tutor-card" data-category="latif" data-name="sir adnan dahar"
+                data-subject="english social studies">
+                <div class="card-img-wrap"><img src="adnan-member.jpeg" alt="Sir Muhammad Adnan Dahar"></div>
+                <div class="card-body">
+                    <span>BSc</span>
+                    <h3>Sir Muhammad Adnan Dahar</h3>
+                    <p>English & Social Studies Teacher.</p>
+                </div>
+            </a>
+            <a href="tauqeer-portfolio.html" class="tutor-card" data-category="latif" data-name="sir tauqeer kolachi"
+                data-subject="science">
+                <div class="card-img-wrap"><img src="tauqeer-member.jpeg" alt="Sir Tauqeer Ali Kolachi"></div>
+                <div class="card-body">
+                    <span>Bsc</span>
+                    <h3>Sir Tauqeer Ali Kolachi</h3>
+                    <p>General Science Teacher.</p>
+                </div>
+            </a>
+            <div id="no-results">No faculty members found.</div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>&copy; 2026 Fuqra Tutors Daharki</footer>
+
+        <script>
+            // ============================================
+            // LOADER FUNCTIONALITY
+            // ============================================
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const loaderWrapper = document.getElementById('loader-wrapper');
+                    loaderWrapper.classList.add('hide');
+                }, 2000);
+            });
+
+            // ============================================
+            // SEARCH & FILTER FUNCTIONALITY
+            // ============================================
+            const searchInput = document.getElementById('tutorSearch');
+            const chips = document.querySelectorAll('.chip');
+            const tutorCards = document.querySelectorAll('.tutor-card');
+            const noResults = document.getElementById('no-results');
+
+            let activeFilter = 'all';
+
+            /**
+             * Filter tutors based on search query and active chip filter
+             */
+            const filterTutors = () => {
+                const query = searchInput.value.toLowerCase().trim();
+                let hasVisibleCards = false;
+
+                tutorCards.forEach(card => {
+                    const name = card.getAttribute('data-name') || '';
+                    const subject = card.getAttribute('data-subject') || '';
+                    const category = card.getAttribute('data-category') || '';
+
+                    const matchesSearch = name.includes(query) || subject.includes(query);
+                    const matchesChip = activeFilter === 'all' || category === activeFilter;
+
+                    if (matchesSearch && matchesChip) {
+                        card.style.display = 'flex';
+                        hasVisibleCards = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                noResults.style.display = hasVisibleCards ? 'none' : 'block';
+            };
+
+            // Listen for search input changes
+            searchInput.addEventListener('input', filterTutors);
+
+            // Handle chip filter clicks
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    // Remove active class from all chips
+                    chips.forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked chip
+                    chip.classList.add('active');
+                    // Update active filter and rerun filter
+                    activeFilter = chip.getAttribute('data-filter');
+                    filterTutors();
+                });
+            });
+        </script>
+    </body>
+
+</html>

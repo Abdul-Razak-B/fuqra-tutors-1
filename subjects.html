@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Academic Disciplines | Fuqra Tutors</title>
+
+        <link rel="icon" type="image/svg+xml"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2220%22 y=%2215%22 width=%2260%22 height=%2270%22 rx=%225%22 fill=%22%230056b3%22/><path d=%22M30 15 V85 M40 15 V85 M50 15 V85%22 stroke=%22rgba(255,255,255,0.2)%22 stroke-width=%222%22/><rect x=%2220%22 y=%2275%22 width=%2260%22 height=%2210%22 fill=%22%23ffb703%22/><path d=%22M70 30 H80 V40 L75 35 L70 40 Z%22 fill=%22white%22/></svg>">
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+            rel="stylesheet">
+
+        <style>
+            :root {
+                --primary: #0056b3;
+                --accent: #ffb703;
+                --bg-light: #f8f9fa;
+                --white: #ffffff;
+                --text-dark: #1a1a1a;
+                --text-muted: #757575;
+                --glass: rgba(255, 255, 255, 0.95);
+                --border: rgba(0, 0, 0, 0.05);
+                --shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            }
+
+            /* --- SCROLLBAR --- */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--bg-light);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: linear-gradient(to bottom, var(--primary), #00c6ff);
+                border-radius: 10px;
+                box-shadow: 0 0 15px var(--primary);
+                border: 2px solid #fdfdfd;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--bg-light);
+                color: var(--text-dark);
+                overflow-x: hidden;
+            }
+
+            /* --- LOADER --- */
+            #loader-wrapper {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #ffffff;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                transition: opacity 0.8s ease-out, visibility 0.8s;
+            }
+
+            .loader-container {
+                position: relative;
+                width: 150px;
+                height: 150px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .star-outline {
+                position: absolute;
+                fill: none;
+                stroke-width: 2;
+                stroke-dasharray: 150;
+                animation: rotateStar 4s linear infinite;
+            }
+
+            .star-1 {
+                width: 120px;
+                height: 120px;
+                stroke: var(--primary);
+            }
+
+            .star-2 {
+                width: 150px;
+                height: 150px;
+                stroke: var(--accent);
+                animation-duration: 6s;
+                animation-direction: reverse;
+            }
+
+            /* UPDATED ICON BOX */
+            .tutor-icon-load {
+                width: 70px;
+                height: 70px;
+                background: var(--primary);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 5;
+                animation: pulse-icon 2s infinite;
+            }
+
+            @keyframes rotateStar {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes pulse-icon {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            .loader-text {
+                margin-top: 30px;
+                font-weight: 600;
+                color: var(--primary);
+                letter-spacing: 4px;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+            }
+
+            /* --- NAVIGATION --- */
+            .navbar {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                padding: 1.2rem 10%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 1000;
+                background: var(--glass);
+                backdrop-filter: blur(15px);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                gap: 12px;
+                transition: transform 0.3s ease;
+            }
+
+            .logo-container:hover {
+                transform: scale(1.05);
+            }
+
+            .nav-logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .logo-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.4rem;
+                color: var(--text-dark);
+                font-weight: 700;
+                letter-spacing: -0.5px;
+            }
+
+            .logo-title span {
+                color: var(--primary);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 40px;
+                list-style: none;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: var(--text-muted);
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                transition: color 0.3s ease;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                color: var(--primary);
+            }
+
+            /* --- CONTENT --- */
+            .subjects-header {
+                padding: 180px 10% 60px;
+                text-align: center;
+            }
+
+            .subjects-header h1 {
+                font-family: 'Playfair Display', serif;
+                font-size: clamp(2.5rem, 6vw, 4rem);
+                margin-bottom: 20px;
+                color: var(--text-dark);
+            }
+
+            .subjects-header h1 i {
+                font-style: italic;
+                color: var(--primary);
+            }
+
+            .subjects-header p {
+                color: var(--text-muted);
+                max-width: 600px;
+                margin: 0 auto;
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            .subject-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 30px;
+                padding: 0 10% 120px;
+                align-items: start;
+            }
+
+            .subject-card {
+                background: var(--white);
+                padding: 40px 30px;
+                border-radius: 24px;
+                box-shadow: var(--shadow);
+                border: 1px solid var(--border);
+                text-align: center;
+                transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .subject-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 5px;
+                background: var(--primary);
+                transform: scaleX(0);
+                transition: transform 0.4s ease;
+                transform-origin: left;
+            }
+
+            .subject-card:hover {
+                transform: translateY(-10px);
+                border-color: var(--primary);
+                box-shadow: 0 20px 50px rgba(0, 86, 179, 0.15);
+            }
+
+            .subject-card:hover::before {
+                transform: scaleX(1);
+            }
+
+            .subject-icon {
+                font-size: 2.8rem;
+                margin-bottom: 20px;
+                display: inline-block;
+                transition: transform 0.3s ease;
+            }
+
+            .subject-card:hover .subject-icon {
+                transform: scale(1.15);
+            }
+
+            .subject-card h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+                color: var(--text-dark);
+            }
+
+            .course-desc {
+                font-size: 0.9rem;
+                color: var(--text-muted);
+                line-height: 1.7;
+                margin-bottom: 25px;
+                flex-grow: 1;
+            }
+
+            .tutor-list {
+                border-top: 1px solid var(--border);
+                padding-top: 20px;
+                margin-top: auto;
+            }
+
+            .tutor-list h4 {
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: var(--primary);
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .tutor-names {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .tutor-names li a {
+                text-decoration: none;
+                color: var(--text-dark);
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                display: inline-block;
+                position: relative;
+            }
+
+            .tutor-names li a:hover {
+                color: var(--primary);
+            }
+
+            /* --- ARCHITECTURAL FOOTER --- */
+            .lux-footer {
+                background: #050a14;
+                color: #ffffff;
+                padding: 100px 10% 40px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .footer-grid {
+                display: grid;
+                grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+                gap: 60px;
+                position: relative;
+                z-index: 2;
+                text-align: left;
+            }
+
+            .footer-brand h2 {
+                font-family: 'Playfair Display';
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+
+            .footer-brand h2 span {
+                color: var(--primary);
+            }
+
+            .footer-brand p {
+                color: #8a8f98;
+                font-size: 0.9rem;
+                line-height: 1.8;
+                margin-bottom: 30px;
+            }
+
+            .footer-heading {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                color: var(--primary);
+                font-weight: 700;
+                margin-bottom: 25px;
+            }
+
+            .footer-links {
+                list-style: none;
+            }
+
+            .footer-links li {
+                margin-bottom: 15px;
+            }
+
+            .footer-links a {
+                color: #8a8f98;
+                text-decoration: none;
+                font-size: 0.85rem;
+                transition: 0.3s;
+            }
+
+            .footer-links a:hover {
+                color: var(--primary);
+                padding-left: 8px;
+            }
+
+            .social-icons {
+                display: flex;
+                gap: 15px;
+            }
+
+            .social-btn {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.4s;
+                text-decoration: none;
+                font-size: 1.2rem;
+            }
+
+            .social-btn:hover {
+                background: var(--primary);
+                border-color: var(--primary);
+                transform: translateY(-5px);
+            }
+
+            .footer-bottom {
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                margin-top: 80px;
+                padding-top: 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: #555;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            @media (max-width: 968px) {
+                .footer-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .nav-links {
+                    display: none;
+                }
+
+                .subject-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="loader-wrapper">
+            <div class="loader-container">
+                <svg class="star-outline star-1" viewBox="0 0 100 100">
+                    <path d="M50 5 L63 38 L98 38 L70 58 L80 95 L50 75 L20 95 L30 58 L2 38 L37 38 Z" />
+                </svg>
+                <svg class="star-outline star-2" viewBox="0 0 100 100">
+                    <path d="M50 5 L63 38 L98 38 L70 58 L80 95 L50 75 L20 95 L30 58 L2 38 L37 38 Z" />
+                </svg>
+                <div class="tutor-icon-load">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="white">
+                        <path
+                            d="M12 21l-8-4.5v-10l8 4.5 8-4.5v10l-8 4.5zm0-12.35l-5.6 3.15 5.6 3.15 5.6-3.15-5.6-3.15z" />
+                    </svg>
+                </div>
+            </div>
+            <p class="loader-text">Curating Knowledge</p>
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="logo-container">
+                <svg class="nav-logo-icon" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#0056b3" />
+                    <circle cx="50" cy="40" r="15" fill="white" />
+                    <path d="M25 75 Q50 55 75 75" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" />
+                    <path d="M75 25 L85 15 M85 25 L75 15" stroke="#ffb703" stroke-width="4" />
+                </svg>
+                <div class="logo-title">Fuqra<span>Tutors</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="tutors.html">Tutors</a></li>
+                <li><a href="subjects.html" class="active">Subjects</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+        </nav>
+
+        <header class="subjects-header">
+            <h1>Our <i>Specializations.</i></h1>
+            <p>Explore our core academic domains led by subject specialists dedicated to fostering intellectual growth
+                and mastery.</p>
+        </header>
+
+        <section class="subject-grid">
+            <div class="subject-card">
+                <span class="subject-icon">💻</span>
+                <h2>Computer Science</h2>
+                <p class="course-desc">Focusing on Zero Trust Architecture, Web Development, and modern digital logic to
+                    prepare students for the tech-driven future.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialist</h4>
+                    <ul class="tutor-names">
+                        <li><a href="razak-portfolio.html">Sir Abdul Razak Bhutto</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">📐</span>
+                <h2>Mathematics</h2>
+                <p class="course-desc">Mastering logical quantitative reasoning, advanced calculus, and board-level
+                    algebra through systematic analytical methods.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialists</h4>
+                    <ul class="tutor-names">
+                        <li><a href="sami-portfolio.html">Sir Abdul Sami Dayo</a></li>
+                        <li><a href="mukesh-portfolio.html">Sir Mukesh Kumar Jaipal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">📖</span>
+                <h2>English</h2>
+                <p class="course-desc">Enhancing linguistic proficiency and literary analysis, helping students develop
+                    advanced communication and critical thinking skills.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialists</h4>
+                    <ul class="tutor-names">
+                        <li><a href="sonu-portfolio.html">Sir Sachai Nand Alias Sonu Lavha</a></li>
+                        <li><a href="adnan-portfolio.html">Sir Muhammad Adnan Dahar</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">🧪</span>
+                <h2>General Science</h2>
+                <p class="course-desc">Building strong foundational concepts in biological and physical sciences through
+                    inquiry-based learning and practical observation.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialist</h4>
+                    <ul class="tutor-names">
+                        <li><a href="tauqeer-portfolio.html">Sir Tauqeer Ali Kolachi</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">🕌</span>
+                <h2>Islamic Studies</h2>
+                <p class="course-desc">Exploring ethical philosophy, Fiqh, and theological foundations to foster moral
+                    integrity and spiritual awareness.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialist</h4>
+                    <ul class="tutor-names">
+                        <li><a href="essa-portfolio.html">Sir Muhammad Essa Shar</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">🌍</span>
+                <h2>Social Studies</h2>
+                <p class="course-desc">Examining historical events and civic structures to understand the evolving
+                    cultural and social dynamics of our society.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialist</h4>
+                    <ul class="tutor-names">
+                        <li><a href="adnan-portfolio.html">Sir Muhammad Adnan Dahar</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <span class="subject-icon">⚛️</span>
+                <h2>Chemistry</h2>
+                <p class="course-desc">Investigating molecular interactions and chemical reactions, focusing on
+                    analytical scientific methodology for secondary levels.</p>
+                <div class="tutor-list">
+                    <h4>Lead Specialist</h4>
+                    <ul class="tutor-names">
+                        <li><a href="mukesh-portfolio.html">Sir Mukesh Kumar Jaipal</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="lux-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Fuqra<span>Tutors</span></h2>
+                    <p>A premier collective of scholars dedicated to high-performance education in Daharki. Handcrafted
+                        for the next generation of leaders.</p>
+                    <div class="social-icons">
+                        <a href="https://wa.me/923090609391" class="social-btn">💬</a>
+                        <a href="mailto:abdulrazakb63@gmail.com" class="social-btn">✉️</a>
+                        <a href="#" class="social-btn">🌐</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="tutors.html">Specialist Hub</a></li>
+                        <li><a href="subjects.html">Academic Domains</a></li>
+                        <li><a href="gallery.html">Visual Archive</a></li>
+                        <li><a href="home.html">Core Innovation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Lead Expertise</h4>
+                    <ul class="footer-links">
+                        <li><a href="razak-portfolio.html">Architecture & CS</a></li>
+                        <li><a href="sami-portfolio.html">Advanced Calculus</a></li>
+                        <li><a href="sonu-portfolio.html">Applied Linguistics</a></li>
+                        <li><a href="essa-portfolio.html">Islamic Ethics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Location</h4>
+                    <p style="font-size:0.85rem; color:#8a8f98; line-height:1.8;">Mohalla Bhutta, <br>National Highway
+                        Road, <br>Besides National Bank, <br>Daharki, Sindh.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 FuqraTutors Daharki</span>
+                <span>Elite Faculty Collective</span>
+            </div>
+        </footer>
+
+        <script>
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    document.getElementById('loader-wrapper').style.opacity = '0';
+                    setTimeout(() => document.getElementById('loader-wrapper').style.visibility = 'hidden', 800);
+                }, 2000);
+            });
+        </script>
+    </body>
+
+</html>
